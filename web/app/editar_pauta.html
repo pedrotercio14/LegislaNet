@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Pauta - Legisla Net</title>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/global.css">
+
+    <style>
+        /* ESTILOS ESPECÍFICOS DO FORMULÁRIO DE EDIÇÃO DE PAUTA */
+        .sidebar-header .logo-svg {
+            height: 32px;
+            width: auto;
+            flex-shrink: 0;
+        }
+        
+        /* Formulário de Edição */
+        .form-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--secondary-text);
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea,
+        .form-group select {
+            background-color: var(--hover-bg);
+            border: 1px solid var(--border-color);
+            color: var(--primary-text);
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%238b949e" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 30px;
+        }
+
+        .file-upload-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .file-display {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .file-display .file-badge {
+            background-color: var(--accent-blue);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .file-display .btn-preview {
+            background-color: var(--hover-bg);
+            border: 1px solid var(--border-color);
+            color: var(--primary-text);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-preview:hover {
+            background-color: #2e343b;
+        }
+
+        .file-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            display: none;
+        }
+
+        .file-input-wrapper .custom-file-upload {
+            background-color: var(--hover-bg);
+            border: 1px solid var(--border-color);
+            color: var(--primary-text);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .custom-file-upload:hover {
+            background-color: #2e343b;
+        }
+
+        .file-name {
+            color: var(--secondary-text);
+            font-size: 0.875rem;
+        }
+
+        .form-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-layout">
+        
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <svg class="logo-svg" viewBox="0 0 44 40" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="var(--accent-blue)"></stop>
+                            <stop offset="100%" stop-color="var(--accent-green)"></stop>
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#logoGradient)" d="M 8 5 V 35 H 14 V 5 Z M 19 5 V 35 H 25 V 5 Z M 30 5 V 35 H 36 V 5 Z M 5 35 H 39 V 40 H 5 Z"></path>
+                </svg>
+                <h1>Legisla Net</h1>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-group-title">Acesso Rápido</li>
+                <li class="nav-item"><a href="#" data-page="dashboard">Dashboard</a></li>
+                <li class="nav-item"><a href="#" data-page="cadastro">Cadastro de Pautas</a></li>
+                
+                <li class="nav-group-title">Gerenciamento</li>
+                <li class="nav-item"><a href="#" data-page="vereadores">Vereadores</a></li>
+                <li class="nav-item"><a href="#" data-page="ordem_do_dia">Ordem do dia</a></li>
+                <li class="nav-item"><a href="#" data-page="sessoes">Sessões</a></li>
+                <li class="nav-group-title">Relatórios</li>
+                <li class="nav-item"><a href="#" data-page="relatorio">Relatório de votações</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content" id="mainContent">
+            
+            <header class="content-header">
+                <div class="header-title">
+                    <i class="fa-solid fa-file-lines"></i>
+                    <h2>Editar Pauta</h2>
+                </div>
+                <div class="user-profile">
+                    <button class="profile-button" id="profileBtn">
+                        <div class="profile-avatar">A</div>
+                        <div class="profile-info">
+                            <span class="name">Admin DEL</span>
+                            <span class="email">admin_del@camara.digital</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="#" class="dropdown-item" data-page="perfil"><i class="fa-regular fa-user"></i> Meu Perfil</a>
+                        <a href="#" class="dropdown-item"><i class="fa-regular fa-bell"></i> Notificações</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
+                    </div>
+                </div>
+            </header>
+
+            <section class="form-section fade-in">
+                <div class="form-group">
+                    <label for="autorPauta">Autor da pauta</label>
+                    <input type="text" id="autorPauta" value="Ver: Toinho de Quinca" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="nomePauta">Nome</label>
+                    <input type="text" id="nomePauta" value="Denúncia - 2ª votação">
+                </div>
+
+                <div class="form-group">
+                    <label for="statusPauta">Status da Pauta</label>
+                    <select id="statusPauta">
+                        <option value="finalizada" selected>Finalizada</option>
+                        <option value="em_votacao">Em votação</option>
+                        <option value="pendente">Pendente</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="descricaoPauta">Descrição</label>
+                    <textarea id="descricaoPauta">Denúncia com pedido de instauração de Comissão Parlamentar de Inquérito</textarea>
+                </div>
+
+                <div class="file-upload-group">
+                    <label>Arquivo</label>
+                    <div class="file-display">
+                        <span class="file-badge">PDF</span>
+                        <button class="btn-preview"><i class="fa-solid fa-eye"></i> Ver Preview</button>
+                    </div>
+                    <div class="file-input-wrapper">
+                        <label for="fileInput" class="custom-file-upload">
+                            Escolher arquivo
+                        </label>
+                        <input type="file" id="fileInput">
+                        <span class="file-name">Nenhum arquivo escolhido</span>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary">Atualizar Pauta</button>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="../js/global.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Script para input de arquivo
+            const fileInput = document.getElementById('fileInput');
+            const fileNameSpan = document.querySelector('.file-name');
+
+            if(fileInput) {
+                fileInput.addEventListener('change', (event) => {
+                    if (event.target.files.length > 0) {
+                        fileNameSpan.textContent = event.target.files[0].name;
+                    } else {
+                        fileNameSpan.textContent = 'Nenhum arquivo escolhido';
+                    }
+                });
+            }
+
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Legisla Net</title>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/global.css">
+
+    <style>
+        /* ESTILOS ESPECÍFICOS E DE ANIMAÇÃO DO DASHBOARD */
+        .sidebar-header .logo-svg {
+            height: 32px;
+            width: auto;
+            flex-shrink: 0;
+        }
+
+        .filters {
+            margin-bottom: 24px;
+            flex-shrink: 0;
+        }
+
+        .filter-button {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--primary-text);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .pautas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+            flex-grow: 1;
+        }
+
+        .pauta-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+        }
+
+        .pauta-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transition: border-color 0.2s, transform 0.2s;
+            width: 100%;
+        }
+        .pauta-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-4px);
+        }
+
+        .pauta-card h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .pauta-card .description {
+            color: var(--secondary-text);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        .pauta-info {
+            font-size: 0.875rem;
+            color: var(--secondary-text);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .pauta-info .label {
+            font-weight: 600;
+            color: var(--primary-text);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background-color: rgba(46, 160, 67, 0.2);
+            color: #71e67f;
+            border: 1px solid rgba(46, 160, 67, 0.4);
+        }
+        
+        .card-footer {
+            border-top: 1px solid var(--border-color);
+            padding-top: 16px;
+            font-size: 0.875rem;
+            color: var(--secondary-text);
+        }
+
+        .pagination-container {
+            margin-top: 32px;
+            padding-bottom: 16px;
+            flex-shrink: 0;
+        }
+        .pagination-controls .disabled {
+            color: #484f58;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-layout">
+        
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <svg class="logo-svg" viewBox="0 0 44 40" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="var(--accent-blue)" />
+                            <stop offset="100%" stop-color="var(--accent-green)" />
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#logoGradient)" d="M 8 5 V 35 H 14 V 5 Z M 19 5 V 35 H 25 V 5 Z M 30 5 V 35 H 36 V 5 Z M 5 35 H 39 V 40 H 5 Z" />
+                </svg>
+                <h1>Legisla Net</h1>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-group-title">Acesso Rápido</li>
+                <li class="nav-item active"><a href="#" data-page="dashboard">Dashboard</a></li>
+                <li class="nav-item"><a href="#" data-page="cadastro">Cadastro de Pautas</a></li>
+                <li class="nav-group-title">Gerenciamento</li>
+                <li class="nav-item"><a href="#" data-page="vereadores">Vereadores</a></li>
+                <li class="nav-item"><a href="#" data-page="ordem-do-dia">Ordem do dia</a></li>
+                <li class="nav-item"><a href="#" data-page="sessoes">Sessões</a></li>
+                <li class="nav-group-title">Relatórios</li>
+                <li class="nav-item"><a href="#" data-page="relatorio">Relatório de votações</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content" id="mainContent">
+            
+            <header class="content-header">
+                <div class="header-title">
+                    <i class="fa-solid fa-table-columns"></i>
+                    <h2>Dashboard</h2>
+                </div>
+                <div class="user-profile">
+                    <button class="profile-button" id="profileBtn">
+                        <div class="profile-avatar">A</div>
+                        <div class="profile-info">
+                            <span class="name">Admin DEL</span>
+                            <span class="email">admin_del@camara.digital</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="#" class="dropdown-item" data-page="perfil"><i class="fa-regular fa-user"></i> Meu Perfil</a>
+                        <a href="#" class="dropdown-item"><i class="fa-regular fa-bell"></i> Notificações</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
+                    </div>
+                </div>
+            </header>
+
+            <div class="pautas-grid">
+                <a href="painel_votacao.html" class="pauta-card-link fade-in">
+                    <div class="pauta-card">
+                        <h3>Denúncia - 2ª votação</h3>
+                        <p class="description">Denúncia com pedido de instauração de Comissão Parlamentar de Inquérito</p>
+                        <div class="pauta-info">
+                            <div><span class="label">Autor:</span> Ver. Toinho de Quinca</div>
+                            <div><span class="label">Status:</span> <span class="status-badge">finalizada</span></div>
+                            <div><span class="label">Situação:</span> <span class="badge-aprovado">Aprovado</span></div>
+                            <div><span class="label">Data:</span> 29/07/2025</div>
+                            <div><span class="label">Sessão:</span> <span class="badge-observacao">10º Sessão extraordinária</span></div>
+                        </div>
+                        <div class="card-footer">6 votos registrados</div>
+                    </div>
+                </a>
+
+                <a href="painel_votacao.html" class="pauta-card-link fade-in">
+                    <div class="pauta-card">
+                        <h3>Denúncia - 1ª votação</h3>
+                        <p class="description">Denúncia com pedido de instauração de Comissão Parlamentar de Inquérito</p>
+                        <div class="pauta-info">
+                            <div><span class="label">Autor:</span> Ver. Toinho de Quinca</div>
+                            <div><span class="label">Status:</span> <span class="status-badge">finalizada</span></div>
+                            <div><span class="label">Situação:</span> <span class="badge-reprovado">Reprovado</span></div>
+                            <div><span class="label">Data:</span> 29/07/2025</div>
+                            <div><span class="label">Sessão:</span> <span class="badge-observacao">10º Sessão extraordinária</span></div>
+                        </div>
+                        <div class="card-footer">7 votos registrados</div>
+                    </div>
+                </a>
+
+                <a href="painel_votacao.html" class="pauta-card-link fade-in">
+                    <div class="pauta-card">
+                        <h3>PROJETO DE LEI 030/2025 - 2ª votação</h3>
+                        <p class="description">Institui o Dia do Comerciário no Município de Dom Expedito Lopes - Piauí, a ser celebrado anualmente no dia 30 de outubro.</p>
+                        <div class="pauta-info">
+                            <div><span class="label">Autor:</span> Ver. João Lourende de Moura Araújo</div>
+                            <div><span class="label">Status:</span> <span class="status-badge">finalizada</span></div>
+                            <div><span class="label">Situação:</span> <span class="badge-aprovado">Aprovado</span></div>
+                            <div><span class="label">Data:</span> 08/07/2025</div>
+                            <div><span class="label">Sessão:</span> <span class="badge-observacao">10º Sessão extraordinária</span></div>
+                        </div>
+                        <div class="card-footer">8 votos registrados</div>
+                    </div>
+                </a>
+
+                <a href="painel_votacao.html" class="pauta-card-link fade-in">
+                    <div class="pauta-card">
+                        <h3>PROJETO DE LEI 030/2025 - 1ª votação</h3>
+                        <p class="description">Institui o Dia do Comerciário no Município de Dom Expedito Lopes - Piauí, a ser celebrado anualmente no dia 30 de outubro.</p>
+                        <div class="pauta-info">
+                            <div><span class="label">Autor:</span> Ver. João Lourende de Moura Araújo</div>
+                            <div><span class="label">Status:</span> <span class="status-badge">finalizada</span></div>
+                            <div><span class="label">Situação:</span> <span class="badge-aprovado">Aprovado</span></div>
+                            <div><span class="label">Data:</span> 08/07/2025</div>
+                            <div><span class="label">Sessão:</span> <span class="badge-observacao">10º Sessão extraordinária</span></div>
+                        </div>
+                        <div class="card-footer">9 votos registrados</div>
+                    </div>
+                </a>
+
+                <a href="painel_votacao.html" class="pauta-card-link fade-in">
+                    <div class="pauta-card">
+                        <h3>PARECER PROJETO DE LEI 030 CCJR - 2ª votação</h3>
+                        <p class="description">Parecer da Comissão de Constituição, Justiça e Redação sobre o Projeto de Lei nº 030/2025.</p>
+                        <div class="pauta-info">
+                            <div><span class="label">Autor:</span> Ver. João Lourende de Moura Araújo</div>
+                            <div><span class="label">Status:</span> <span class="status-badge">finalizada</span></div>
+                            <div><span class="label">Situação:</span> <span class="badge-aprovado">Aprovado</span></div>
+                            <div><span class="label">Data:</span> 08/07/2025</div>
+                            <div><span class="label">Sessão:</span> <span class="badge-observacao">10º Sessão extraordinária</span></div>
+                        </div>
+                        <div class="card-footer">9 votos registrados</div>
+                    </div>
+                </a>
+
+                <a href="painel_votacao.html" class="pauta-card-link fade-in">
+                    <div class="pauta-card">
+                        <h3>PARECER PROJETO DE LEI 030 CCJR - 1ª votação</h3>
+                        <p class="description">Parecer da Comissão de Constituição, Justiça e Redação sobre o Projeto de Lei nº 030/2025.</p>
+                        <div class="pauta-info">
+                            <div><span class="label">Autor:</span> Ver. João Lourende de Moura Araújo</div>
+                            <div><span class="label">Status:</span> <span class="status-badge">finalizada</span></div>
+                            <div><span class="label">Situação:</span> <span class="badge-aprovado">Aprovado</span></div>
+                            <div><span class="label">Data:</span> 08/07/2025</div>
+                            <div><span class="label">Sessão:</span> <span class="badge-observacao">10º Sessão extraordinária</span></div>
+                        </div>
+                        <div class="card-footer">9 votos registrados</div>
+                    </div>
+                </a>
+                
+                <a href="painel_votacao.html" class="pauta-card-link fade-in">
+                    <div class="pauta-card">
+                        <h3>Indicação nº 015/2025</h3>
+                        <p class="description">Sugere ao Poder Executivo a construção de uma nova praça no bairro central da cidade.</p>
+                        <div class="pauta-info">
+                            <div><span class="label">Autor:</span> Ver. Maria da Silva</div>
+                            <div><span class="label">Status:</span> <span class="status-badge">finalizada</span></div>
+                             <div><span class="label">Situação:</span> <span class="badge-aprovado">Aprovado</span></div>
+                            <div><span class="label">Data:</span> 15/07/2025</div>
+                            <div><span class="label">Sessão:</span> <span class="badge-observacao">10º Sessão extraordinária</span></div>
+                        </div>
+                        <div class="card-footer">12 votos registrados</div>
+                    </div>
+                </a>
+
+                <a href="painel_votacao.html" class="pauta-card-link fade-in">
+                    <div class="pauta-card">
+                        <h3>Requerimento de Urgência</h3>
+                        <p class="description">Solicita regime de urgência para votação do Projeto de Lei Complementar nº 005/2025.</p>
+                        <div class="pauta-info">
+                            <div><span class="label">Autor:</span> Ver. José Pereira</div>
+                            <div><span class="label">Status:</span> <span class="status-badge">finalizada</span></div>
+                            <div><span class="label">Situação:</span> <span class="badge-reprovado">Reprovado</span></div>
+                            <div><span class="label">Data:</span> 22/07/2025</div>
+                            <div><span class="label">Sessão:</span> <span class="badge-observacao">10º Sessão extraordinária</span></div>
+                        </div>
+                        <div class="card-footer">12 votos registrados</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="pagination-container">
+                <div class="pagination-controls">
+                    <a href="#" class="disabled">&lt; Previous</a>
+                    <a href="#" class="active">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">4</a>
+                    <a href="#">5</a>
+                    <span>...</span>
+                    <a href="#">15</a>
+                    <a href="#">Next &gt;</a>
+                </div>
+            </div>
+
+        </main>
+
+    </div>
+
+    <script src="../js/global.js"></script>
+
+    <script>
+        
+    </script>
+
+</body>
+</html>
